@@ -34,6 +34,12 @@ ADMIN_EMAILS = {
     "jan.gretschuskin@jobcloud.ch",
 }
 
+# SharePoint-Excel: Primaer ueber OneDrive Sync, Fallback auf lokale Kopie in daten/
+SHAREPOINT_EXCEL_PATH = os.getenv(
+    "SHAREPOINT_EXCEL_PATH",
+    r"C:\Users\JanGretschuskin\Jobcloud\HR - Documents\02_Development\Language courses\Babbel\Babbel User List.xlsx"
+)
+
 
 # ---------------------------------------------------------------------------
 # Data Loaders
@@ -182,14 +188,22 @@ def load_sharepoint_excel():
     """Load SharePoint Excel: Status, Intensive flag, Last Active Month."""
     from openpyxl import load_workbook
     candidates = [
+        Path(SHAREPOINT_EXCEL_PATH),
         *glob.glob(str(DATA_DIR / "Babbel User List*")),
     ]
     filepath = next((f for f in candidates if Path(f).exists()), None)
     if not filepath:
         print("WARNUNG: SharePoint Excel nicht gefunden.")
+        print(f"  Erwartet: {SHAREPOINT_EXCEL_PATH}")
+        print(f"  Oder: daten/Babbel User List*.xlsx")
         return {}
-    print(f"    Quelle: {Path(filepath).name}")
-    wb = load_workbook(filepath, read_only=True)
+    print(f"    Quelle: {filepath}")
+    try:
+        wb = load_workbook(filepath, read_only=True)
+    except Exception as e:
+        print(f"WARNUNG: SharePoint Excel konnte nicht gelesen werden: {e}")
+        print("  (Datei eventuell von anderem Nutzer gesperrt oder OneDrive nicht gesynced)")
+        return {}
     ws = wb.active
     rows = list(ws.iter_rows(values_only=True))
     wb.close()

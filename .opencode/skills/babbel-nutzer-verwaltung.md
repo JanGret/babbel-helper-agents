@@ -83,9 +83,9 @@ py consolidate.py --context intensive
 | `daten/app_lessons.csv` | Babbel Reports > App lessons | Ja |
 | `daten/memberships.csv` | Babbel /users | Ja |
 | `daten/intensive_credits.csv` | Babbel /intensivecredits | Ja |
-| `daten/Babbel User List*.xlsx` | SharePoint (manuell) | Nein (spaeter) |
+| SharePoint-Excel (OneDrive Sync) | SharePoint > HR > Babbel User List.xlsx | Ja (via Sync) |
 
-**Fallback:** `consolidate.py` erkennt auch aeltere Dateinamen (z.B. `Active_Days,_Activit_*.csv`).
+**SharePoint-Excel:** Wird direkt vom lokalen OneDrive-Sync-Pfad gelesen. Der Pfad ist konfigurierbar via `SHAREPOINT_EXCEL_PATH` in `.env`. Fallback auf `daten/Babbel User List*.xlsx` falls der Sync-Pfad nicht existiert.
 
 ## Scoring-Logik
 
@@ -147,4 +147,5 @@ py consolidate.py
 - **Timeframe:** Nur der Learners-Tab braucht einen Custom-Date-Range (wird per React-Hack gesetzt)
 - **DOM-Reihenfolge:** Im Timeframe-Widget ist nth(0) das "to"-Feld und nth(1) das "from"-Feld
 - **Plan-Typen:** `professional` = App-only, `private-classes-9d148a1c` = Intensive (1:1 Lektionen)
-- **SharePoint-Excel:** Wird aktuell manuell im `daten/`-Ordner gepflegt (spaeter: Microsoft Graph API)
+- **SharePoint-Excel:** Wird direkt vom lokalen OneDrive-Sync-Pfad gelesen (kein manuelles Kopieren noetig)
+- **Sync-Pfad:** Konfigurierbar via `SHAREPOINT_EXCEL_PATH` in `.env`
