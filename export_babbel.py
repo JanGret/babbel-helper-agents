@@ -232,38 +232,43 @@ def set_timeframe(page, days_back=730):
     ''')
 
     print(f"  Timeframe gesetzt: {start_date} - heute")
-    time.sleep(15)
+    time.sleep(5)
 
 
 def export_csv(page, output_path):
     """Export the current tab's table as CSV via hover menu."""
     print("  Exportiere CSV...")
-    time.sleep(5)
 
     qs_frame = _get_qs_frame(page)
     if not qs_frame:
         raise Exception("QuickSight-Frame nicht gefunden")
 
     try:
-        qs_frame.wait_for_load_state("networkidle", timeout=30000)
+        qs_frame.wait_for_load_state("networkidle", timeout=15000)
     except PlaywrightTimeout:
         pass
-    time.sleep(5)
+    time.sleep(3)
 
-    # Finde den Menue-Button durch Hover ueber grid-blocks
+    # Finde den Menue-Button durch Hover ueber grid-blocks (mit Retry)
     menu_btn = None
-    table_visual = qs_frame.locator('[data-automation-id="grid-block"]')
-    count = table_visual.count()
-    for idx in range(count):
-        try:
-            table_visual.nth(idx).hover(timeout=5000)
-            time.sleep(2)
-            btn = qs_frame.locator('[data-automation-id="analysis_visual_dropdown_menu_button"]')
-            if btn.count() > 0:
-                menu_btn = btn.first
-                break
-        except (PlaywrightTimeout, Exception):
-            continue
+    for retry in range(3):
+        table_visual = qs_frame.locator('[data-automation-id="grid-block"]')
+        count = table_visual.count()
+        for idx in range(count):
+            try:
+                table_visual.nth(idx).hover(timeout=3000)
+                time.sleep(1)
+                btn = qs_frame.locator('[data-automation-id="analysis_visual_dropdown_menu_button"]')
+                if btn.count() > 0:
+                    menu_btn = btn.first
+                    break
+            except (PlaywrightTimeout, Exception):
+                continue
+        if menu_btn:
+            break
+        if retry < 2:
+            print(f"    Menue-Button nicht gefunden, Versuch {retry + 2}/3...")
+            time.sleep(3)
 
     if not menu_btn:
         raise Exception("Menue-Button nicht gefunden")
