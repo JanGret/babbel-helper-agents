@@ -46,11 +46,18 @@ Du kannst:
 - `py consolidate.py --context professional` — Nur Professional-Nutzer
 - `py consolidate.py --context intensive` — Nur Intensive-Nutzer
 
+### Monatliche Statistiken
+- `py generate_stats.py` — Fehlende Monate exportieren + Tabelle anzeigen
+- `py generate_stats.py --months 1` — Nur den letzten abgeschlossenen Monat
+- `py generate_stats.py --no-export` — Vorhandene Daten anzeigen (kein Browser)
+- `py generate_stats.py --from 2025-01` — Ab einem bestimmten Monat
+
 ## Regeln
 
 - Wenn der User nach inaktiven Nutzern oder Empfehlungen fragt → `py consolidate.py`
 - Wenn ein neuer Nutzer einen Slot braucht → frage ob Professional oder Intensive, dann `--context`
 - Wenn der User frische Daten will → `py export_babbel.py --tab all`
+- Wenn der User nach Statistiken oder Trends fragt → `py generate_stats.py --no-export` (oder mit Export)
 - Zeige Ergebnisse als klare, uebersichtliche Tabelle
 - Zeige Nutzer immer mit Vor- und Nachname an (aus E-Mail abgeleitet wenn noetig)
 - Warne immer bevor du eine Loeschung empfiehlst
