@@ -536,6 +536,31 @@ def export_months(months_to_export):
             login(page)
             context.storage_state(path=str(SESSION_DIR / "state.json"))
 
+            # Memberships aktualisieren wenn noetig (< 7 Tage alt)
+            memberships_path = DATA_DIR / "memberships.csv"
+            memberships_stale = True
+            if memberships_path.exists():
+                age_days = (datetime.now() - datetime.fromtimestamp(memberships_path.stat().st_mtime)).days
+                memberships_stale = age_days >= 7
+
+            if memberships_stale:
+                print("\n  Memberships aktualisieren (fuer Professional/Intensive Split)...")
+                page.goto(f"{BABBEL_BASE_URL}/de/organizations/jobcloud/users")
+                try:
+                    page.wait_for_load_state("networkidle", timeout=30000)
+                except PlaywrightTimeout:
+                    pass
+                time.sleep(3)
+                try:
+                    with page.expect_download(timeout=30000) as download_info:
+                        btn = page.locator('[data-class="download-members"], [aria-label="Daten herunterladen"]')
+                        btn.first.click(timeout=10000)
+                    DATA_DIR.mkdir(exist_ok=True)
+                    download_info.value.save_as(memberships_path)
+                    print(f"  Memberships gespeichert: {memberships_path.name}")
+                except Exception as e:
+                    print(f"  WARNUNG: Memberships-Download fehlgeschlagen: {e}")
+
             exported = []
             for i, ym in enumerate(months_to_export):
                 year, month = ym
