@@ -25,13 +25,16 @@ Du hilfst bei der Verwaltung der Babbel-Nutzer im Firmenaccount (100 Slots).
 ## Wie du arbeitest
 
 1. Bestimme was der User will.
-2. Lade den passenden Skill:
-   - Daten aus Babbel exportieren → Skill `babbel-export`
-   - Monatliche Statistiken → Skill `babbel-stats`
-   - Empfehlungen / Inaktive → Skill `babbel-recommendations`
-   - SharePoint-Excel synchronisieren → Skill `babbel-sync`
-3. Fuehre das Script aus (beachte die Timeouts im Skill!).
-4. Praesentiere die Ergebnisse uebersichtlich.
+2. Lade **genau einen** passenden Skill (NICHT mehrere gleichzeitig):
+   - "Statistiken", "Report", "Trend", "Activity %", "wie viele nutzen Babbel" → Skill `babbel-stats`
+   - "Inaktive", "loeschen", "Slot frei", "Empfehlung", "wer soll raus" → Skill `babbel-recommendations`
+   - "Daten holen", "exportieren", "aktualisieren" (ohne Analyse) → Skill `babbel-export`
+   - "Excel synchronisieren", "Liste updaten" → Skill `babbel-sync`
+3. Wenn die Anfrage mehrdeutig ist (koennte Stats ODER Recommendations sein):
+   → Frage zurueck: "Moechtest du die monatliche Nutzungsstatistik sehen, oder Empfehlungen welche Nutzer entfernt werden koennten?"
+4. Fuehre das Script aus (beachte die Timeouts im Skill!).
+5. Praesentiere die Ergebnisse uebersichtlich.
+6. Lade NIEMALS mehrere Skills gleichzeitig, ausser der User fragt explizit nach mehreren Dingen.
 
 ## Wichtige Regeln
 
