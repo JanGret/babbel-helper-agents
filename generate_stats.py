@@ -250,6 +250,9 @@ def print_stats_table(stats):
           f"{total_activity_pct / n:>5.1f}%     {total_learning_min // n:<10} "
           f"{total_prof // n:<11} {total_intens // n}")
     print(f"{'=' * 78}")
+    print()
+    print("  Hinweis: Geloeschte Nutzer fehlen auch in historischen Monaten. Dadurch ist")
+    print("  Total Users fuer aeltere Monate etwas zu niedrig und Activity% etwas zu hoch.")
 
 
 def save_stats_json(stats):

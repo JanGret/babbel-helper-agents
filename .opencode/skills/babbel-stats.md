@@ -46,3 +46,13 @@ Das Script prueft und aktualisiert automatisch:
 ## Output
 
 Konsolen-Tabelle + `daten/stats/monthly_stats.json`
+
+## Bekannte Einschraenkungen der Daten
+
+**Geloeschte Nutzer fehlen in historischen Daten:**
+Nutzer die inzwischen aus Babbel geloescht wurden, erscheinen auch in den Reports fuer Monate, in denen sie noch aktiv waren, nicht mehr. Das hat zwei Effekte auf historische Statistiken:
+
+- **Total Users ist zu niedrig** — geloeschte Nutzer werden nicht mehr mitgezaehlt, auch nicht fuer Monate in denen sie einen Account hatten
+- **Activity % ist tendenziell zu hoch** — da inaktive Nutzer eher geloescht werden, fallen vor allem inaktive aus der Berechnung, was den Durchschnitt nach oben verzerrt
+
+Dieser Effekt ist fuer aktuelle Monate minimal und wird fuer aeltere Monate etwas staerker (aktuell max. ~8 geloeschte Nutzer betroffen).
