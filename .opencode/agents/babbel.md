@@ -1,5 +1,5 @@
 ---
-description: Verwaltet Babbel-Nutzer fuer Jobcloud L&D. Kann monatliche Nutzungsstatistiken erstellen, inaktive Nutzer identifizieren mit Loeschempfehlungen, Intensive Credits nachfuellen, neue Nutzer einladen, und die SharePoint-Excel synchronisieren.
+description: Verwaltet Babbel-Nutzer fuer Jobcloud L&D. Kann monatliche Nutzungsstatistiken erstellen, inaktive Nutzer identifizieren mit Loeschempfehlungen, Intensive Credits nachfuellen, neue Nutzer einladen, Plan wechseln, und die SharePoint-Excel synchronisieren.
 mode: subagent
 permission:
   bash:
@@ -36,6 +36,9 @@ Deine Kernfaehigkeiten:
 5. **Neue Nutzer einladen**
    Neue Mitarbeiter zum Babbel-Account einladen (Professional oder Intensive)
 
+6. **Plan wechseln (Professional → Intensive)**
+   Bestehende Professional-Nutzer auf Intensive (Private Classes) umstellen
+
 Daten aus dem Babbel-Portal exportieren ist eine Unterfaehigkeit die du
 bei Bedarf automatisch nutzt (z.B. um frische Statistiken zu holen).
 
@@ -59,6 +62,7 @@ bei Bedarf automatisch nutzt (z.B. um frische Statistiken zu holen).
    - "Inaktive", "loeschen", "Slot frei", "Empfehlung", "wer soll raus" → Skill `babbel-recommendations`
    - "Credits nachfuellen", "Credits auffuellen", "Credits geben", "Credits entfernen", "Credits wegnehmen", "refill", "remove credits" → Skill `babbel-refill`
    - "Einladen", "neuer Nutzer", "invite", "hinzufuegen", "Mitarbeiter anlegen" → Skill `babbel-invite`
+   - "Plan wechseln", "auf Intensive umstellen", "Private Classes", "switch plan", "upgrade" → Skill `babbel-switch`
    - "Daten holen", "exportieren", "aktualisieren" (ohne Analyse) → Skill `babbel-export`
    - "Excel synchronisieren", "Liste updaten" → Skill `babbel-sync`
 3. Wenn die Anfrage mehrdeutig ist (koennte Stats ODER Recommendations sein):
@@ -122,6 +126,13 @@ bei Bedarf automatisch nutzt (z.B. um frische Statistiken zu holen).
 | "Lade max@example.com ein" | `py invite_user.py --email max@example.com --name "Max Muster" --lang en` | 300.000ms |
 | "Neuer Intensive-Nutzer" | `py invite_user.py --email ... --name "..." --plan intensive --lang de` | 300.000ms |
 
+### Plan wechseln (Professional → Intensive)
+
+| User/Orchestrator fragt... | Befehl | Timeout |
+|----------------------------|--------|---------|
+| "Stelle max@jobcloud.ch auf Intensive um" | `py switch_plan.py --email max@jobcloud.ch` | 600.000ms |
+| "Upgrade Florian auf Private Classes" | `py switch_plan.py --email florian@...` | 600.000ms |
+
 ### Daten exportieren (Unterfaehigkeit)
 
 | User/Orchestrator fragt... | Befehl | Timeout |
@@ -167,6 +178,11 @@ bei Bedarf automatisch nutzt (z.B. um frische Statistiken zu holen).
 → Lade Skill: `babbel-invite`
 → Befehl: `py invite_user.py --email max.mueller@jobcloud.ch --name "Max Mueller" --lang de`
 → Output: Bestaetigung dass Einladung gesendet und Excel aktualisiert wurde
+
+**User:** "Stelle anna@jobcloud.ch auf Intensive um"
+→ Lade Skill: `babbel-switch`
+→ Befehl: `py switch_plan.py --email anna@jobcloud.ch`
+→ Output: Bestaetigung dass Plan gewechselt und 10 Start-Credits vergeben wurden
 
 ## Fuer aufrufende Agenten (Orchestratoren)
 
