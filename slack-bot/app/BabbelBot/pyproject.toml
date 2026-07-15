@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "BabbelBot"
+version = "0.1.0"
+description = "Babbel Self-Service Bot for Jobcloud employees (Slack integration)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aws-opentelemetry-distro",
+    "bedrock-agentcore >= 1.9.1",
+    "botocore[crt] >= 1.35.0",
+    "strands-agents >= 1.15.0",
+    "playwright >= 1.52.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]

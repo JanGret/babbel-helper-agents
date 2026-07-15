@@ -47,6 +47,12 @@ Das Script prueft und aktualisiert automatisch:
 
 Konsolen-Tabelle + `daten/stats/monthly_stats.json`
 
+Zusaetzlich wird am Ende immer der aktuelle **Intensive Credits Pool-Status** ausgegeben:
+```
+Intensive Credits Pool: 160 remaining / 500 total (340 assigned)
+```
+Dies zeigt wie viele der 500 jaehrlichen Intensive Credits noch verfuegbar sind.
+
 ## Bekannte Einschraenkungen der Daten
 
 **Geloeschte Nutzer fehlen in historischen Daten:**

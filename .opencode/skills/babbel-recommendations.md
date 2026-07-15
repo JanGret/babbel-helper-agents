@@ -46,7 +46,7 @@ py consolidate.py --context intensive     # Nur Intensive-Nutzer
 | `py consolidate.py` | 120.000ms (Standard) | Nein |
 | `py consolidate.py --context professional` | 120.000ms (Standard) | Nein |
 
-**Voraussetzung:** Aktuelle Daten im `daten/`-Ordner. Falls veraltet, vorher `py export_babbel.py --tab all` ausfuehren (Skill: babbel-export).
+**Voraussetzung:** Aktuelle Daten im `daten/`-Ordner. Falls veraltet, vorher `py export_babbel.py --tab all` ausfuehren (Skill: babbel-export). WICHTIG: Immer `--tab all` in EINEM Aufruf verwenden – NIEMALS einzelne Tabs nacheinander aufrufen (oeffnet sonst pro Aufruf ein neues Browser-Fenster).
 
 ## Typische Szenarien
 

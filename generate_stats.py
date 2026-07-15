@@ -33,6 +33,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
+from babbel_utils import read_pool_info, print_pool_info
+
 load_dotenv()
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
@@ -597,6 +599,12 @@ def export_months(months_to_export):
                     continue
 
             print(f"\n  {len(exported)}/{len(months_to_export)} Monate erfolgreich exportiert.")
+
+            # Pool-Info auslesen (Browser ist noch offen)
+            print("\n  Lese Intensive Credits Pool-Info...")
+            pool_info = read_pool_info(page)
+            print_pool_info(pool_info)
+
             return exported
 
         except Exception as e:
@@ -605,6 +613,28 @@ def export_months(months_to_export):
             print(f"\nFEHLER: {e}")
             print(f"Screenshot: {STATS_DIR / 'error_screenshot.png'}")
             return []
+        finally:
+            browser.close()
+
+
+def fetch_pool_info_standalone():
+    """Oeffnet einen kurzen Browser nur um die Pool-Info auszulesen."""
+    print("\nLese Intensive Credits Pool-Info...")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        SESSION_DIR.mkdir(exist_ok=True)
+        context = browser.new_context(
+            storage_state=str(SESSION_DIR / "state.json") if (SESSION_DIR / "state.json").exists() else None,
+            viewport={"width": 1440, "height": 900},
+        )
+        page = context.new_page()
+        try:
+            login(page)
+            context.storage_state(path=str(SESSION_DIR / "state.json"))
+            pool_info = read_pool_info(page)
+            print_pool_info(pool_info)
+        except Exception as e:
+            print(f"  Pool-Info konnte nicht gelesen werden: {e}")
         finally:
             browser.close()
 
@@ -669,6 +699,11 @@ def main():
     stats = calculate_all_stats(available, memberships)
     print_stats_table(stats)
     save_stats_json(stats)
+
+    # Pool-Info: Nur im --no-export Fall separat holen
+    # (Im Export-Fall wird die Pool-Info bereits in export_months() ausgegeben)
+    if args.no_export or not missing:
+        fetch_pool_info_standalone()
 
 
 if __name__ == "__main__":

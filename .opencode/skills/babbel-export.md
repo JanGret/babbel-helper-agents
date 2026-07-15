@@ -44,3 +44,4 @@ py export_babbel.py --headless             # Browser ohne Fenster
 - **Headless:** Nicht verwenden wenn Captcha erwartet wird
 - **QuickSight:** Learners und App-Lessons nutzen ein eingebettetes QuickSight-Dashboard (langsamer)
 - **Direkt-Download:** Memberships und Intensive Credits nutzen einen einfachen Download-Button (schneller)
+- **WICHTIG:** Wenn mehrere Datenquellen benoetigt werden, IMMER `--tab all` in einem einzigen Aufruf verwenden. NIEMALS einzelne Tabs nacheinander mit separaten Aufrufen exportieren – das oeffnet pro Aufruf ein neues Browser-Fenster und ist ineffizient.
